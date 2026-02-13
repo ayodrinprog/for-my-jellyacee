@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine? </title>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ff4d6d;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow: hidden;
+    transition: 0.5s ease;
+}
+
+#container {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 2;
+    animation: fadeIn 0.8s ease;
+}
+
+h1 {
+    color: #b30000;
+    font-size: 24px;
+    animation: pop 1s ease infinite alternate;
+}
+
+.gif-large {
+    width: 80%;
+    max-width: 300px;
+    margin: 15px 0;
+    border-radius: 12px;
+    animation: float 4s ease-in-out infinite;
+    opacity: 0;
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+button {
+    padding: 14px 22px;
+    margin: 8px;
+    border: none;
+    border-radius: 14px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.yes {
+    background: #ff1e4d;
+    color: white;
+}
+
+.no {
+    background: #888;
+    color: white;
+}
+
+.heart, .no-pic {
+    position: absolute;
+    animation: floatUp 5s linear forwards;
+    pointer-events: none;
+    opacity: 1;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-100px); opacity: 0; }
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+</style>
+</head>
+<body>
+
+<div id="container">
+    <h1 id="question">Will you be my Valentine?</h1>
+
+
+    <img id="valentineGif" 
+         src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmJ1aXVqMWkwdXA1d2hhN2NwdHl0Nzk2dTc2cXowMGs5ODc3ajJoYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W1hd3uXRIbddu/giphy.gif" 
+         class="gif-large" alt="Valentine GIF">
+
+    <div>
+        <button class="yes" onclick="yesClicked()">Yes </button>
+        <button class="no" onclick="powerUp()">No </button>
+    </div>
+</div>
+
+<script>
+let yesScale = 1;
+let noScale = 1;
+let redLevel = 77;
+const messages = [
+    "Hindi mo ba love si buninin?",
+    "Love naman eh",
+    "Please",
+    "Pag️-isipan mo",
+    "Maawa ka naman",
+    "sure ka na ba riyan, love?",
+    
+];
+let clickCount = 0;
+
+
+const noPics = [
+    "cat1.jpg",   
+    "cat2.jpg",
+    "cat3.jpg",
+    "cat4.jpg"
+];
+let noPicIndex = 0;
+
+function powerUp() {
+    const yesBtn = document.querySelector(".yes");
+    const noBtn = document.querySelector(".no");
+    const question = document.getElementById("question");
+
+    if (clickCount < messages.length) {
+        question.innerText = messages[clickCount];
+    }
+    clickCount++;
+
+    
+    yesScale += 0.2;
+    yesBtn.style.transform = `scale(${yesScale})`;
+
+    
+    noScale -= 0.15;
+    if (noScale <= 0.1) {
+        noBtn.style.display = "none";
+    } else {
+        noBtn.style.transform = `scale(${noScale})`;
+    }
+
+    
+    redLevel = Math.min(redLevel + 20, 255);
+    document.body.style.background = `rgb(${redLevel}, 0, 0)`;
+
+    
+    if (clickCount === messages.length) {
+        yesBtn.innerText = "Sige na nga ❤️";
+    }
+
+    
+    const pic = document.createElement("img");
+    pic.src = noPics[noPicIndex % noPics.length];
+    noPicIndex++;
+    pic.className = "no-pic";
+    pic.style.width = "80%";
+    pic.style.maxWidth = "300px";
+    pic.style.borderRadius = "12px";
+
+    
+    pic.style.top = Math.random() * 70 + 10 + "vh";
+    pic.style.left = Math.random() * 60 + 20 + "vw";
+
+    document.body.appendChild(pic);
+
+    
+    setTimeout(() => { pic.remove(); }, 5000);
+}
+
+function yesClicked() {
+    const gif = document.getElementById("valentineGif");
+
+    
+    gif.style.opacity = 1;
+    gif.style.transform = "scale(1.1)";
+
+    
+    document.getElementById("question").innerText = "YAYY! I LOVE YOU SO MUCH, MY JELLYACEE";
+
+    
+    document.querySelector(".yes").style.display = "none";
+    document.querySelector(".no").style.display = "none";
+}
+
+
+setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = Math.random() > 1.5 ? "❤️" : "🙏";
+    heart.style.left = Math.random()*100 + "vw";
+    heart.style.fontSize = (Math.random()*40 + 15) + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+}, 400);
+
+</script>
+
+</body>
+</html>
+
+
+<!--
+hindi rin to gawa ng ai :p
+-->
